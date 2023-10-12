@@ -497,6 +497,24 @@ Você deve usar funções anônimas e as funções map, filter e reduce para imp
 ```elixir
 defmodule Recomendacao do
   def recomenda(musicas, preferencia) do
+    musicas
+    |> Enum.filter(fn musica ->
+      genero_preferido?(musica, preferencia) &&
+        duracao_aceitavel?(musica, preferencia) &&
+        avaliacao_aceitavel?(musica, preferencia)
+    end)
+  end
+
+  defp genero_preferido?(musica, %{genero: genero_musica}) do
+    musica.genero == genero_musica
+  end
+
+  defp duracao_aceitavel?(musica, %{duracao_min: min, duracao_max: max}) do
+    musica.duracao >= min && musica.duracao <= max
+  end
+
+  defp avaliacao_aceitavel?(musica, %{avaliacao_min: min}) do
+    musica.avaliacao >= min
   end
 end
 ```
