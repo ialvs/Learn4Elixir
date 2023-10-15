@@ -345,43 +345,45 @@ E então resolva esses problemas:
 
 <!-- livebook:{"break_markdown":true} -->
 
-1. Retorne o temanho da String "pneumoultramicroscopicossilicovulcanoconiótico".
+1. Retorne o tamanho da String "pneumoultramicroscopicossilicovulcanoconiótico".
 
 ```elixir
-
+nome_enorme = "pneumoultramicroscopicossilicovulcanoconiótico"
+String.length(nome_enorme)
 ```
 
-1. Retorne um Lista que possui os mesmos items da lista [:a :b :c] porém com os itens na ordem contrária, ou seja [:c :b :a].
+1. Retorne uma Lista que possui os mesmos items da lista [:a, :b, :c] porém com os itens na ordem contrária, ou seja [:c, :b, :a].
 
 ```elixir
-
+lista = [:a, :b, :c]
+lista_reversa = Enum.reverse(lista)
 ```
 
 1. Retorne um novo mapa que é a união desses dois mapas:
 
-```Elixir
-primeiro_mapa = %{ :um  =>  1, :dois => 2 }
-segundo_mapa  = %{ :tres  =>  3, :quatro => 4 }
+```elixir
+primeiro_mapa = %{:um => 1, :dois => 2}
+segundo_mapa = %{:tres => 3, :quatro => 4}
 ```
 
 ```elixir
-
+Enum.concat(primeiro_mapa, segundo_mapa)
 ```
 
-1. Retorne uma lista de palavras da setença:
+1. Retorne uma lista de palavras da sentença:
 
 ```elixir
 # execute essa célula de código
-setenca = """
+sentenca = """
 Como de hábito, Policarpo Quaresma, mais conhecido por Major Quaresma, bateu em casa às quatro e quinze da tarde. Havia mais de vinte anos que isso acontecia. Saindo do Arsenal de Guerra, onde era subsecretário, bongava pelas confeitarias algumas frutas, comprava um queijo, às vezes, e sempre o pão da padaria francesa.
 """
 ```
 
 ```elixir
-
+String.split(sentenca)
 ```
 
-1. Multiplique todos os itens da seguinte lista e retorne a soma de todos seus items sobrados.
+1. Crie uma nova lista onde cada elemento corresponde a um elemento  da lista abaixo multiplicado por 2. Depois disso, some todos os elementos da nova lista.
 
 ```elixir
 # execute essa célula de código
@@ -389,7 +391,9 @@ lista_de_numeros = [4, 8, 12, 16, 20, 24, 28, 32, 36]
 ```
 
 ```elixir
-
+lista_de_numeros
+|> Enum.map(fn x -> x * 2 end)
+|> Enum.sum()
 ```
 
 ### Exercício 2
@@ -493,7 +497,24 @@ Você deve usar funções anônimas e as funções map, filter e reduce para imp
 ```elixir
 defmodule Recomendacao do
   def recomenda(musicas, preferencia) do
-    # A fazer
+    musicas
+    |> Enum.filter(fn musica ->
+      genero_preferido?(musica, preferencia) &&
+        duracao_aceitavel?(musica, preferencia) &&
+        avaliacao_aceitavel?(musica, preferencia)
+    end)
+  end
+
+  defp genero_preferido?(musica, %{genero: genero_musica}) do
+    musica.genero == genero_musica
+  end
+
+  defp duracao_aceitavel?(musica, %{duracao_min: min, duracao_max: max}) do
+    musica.duracao >= min && musica.duracao <= max
+  end
+
+  defp avaliacao_aceitavel?(musica, %{avaliacao_min: min}) do
+    musica.avaliacao >= min
   end
 end
 ```
@@ -570,52 +591,67 @@ Neste exercício, a documentação oficial do módulo [Enum](https://hexdocs.pm/
 
 ```elixir
 defmodule CalculoEsculturas do
-  def raio_minimo() do
-    # A fazer
+  def raio_minimo(circulos) do
+    Enum.min(circulos)
   end
 
-  def raio_maximo() do
-    # A fazer
+  def raio_maximo(circulos) do
+    Enum.max(circulos)
   end
 
-  def diametro_minimo() do
-    # A fazer
+  def diametro_minimo(circulos) do
+    circulos
+    |> Enum.map(fn x -> x * 2 end)
+    |> Enum.min()
   end
 
-  def diametro_maximo() do
-    # A fazer
+  def diametro_maximo(circulos) do
+    circulos
+    |> Enum.map(fn x -> x * 2 end)
+    |> Enum.max()
   end
 
-  def area_minima() do
-    # A fazer
+  def area_minima(circulos) do
+    circulos
+    |> Enum.map(fn x -> 3.141592 * x * x end)
+    |> Enum.min()
   end
 
-  def area_maxima() do
-    # A fazer
+  def area_maxima(circulos) do
+    circulos
+    |> Enum.map(fn x -> 3.141592 * x * x end)
+    |> Enum.max()
   end
 
-  def media_raios() do
-    # A fazer
+  def media_raios(circulos) do
+    media = Enum.sum(circulos) / Enum.count(circulos)
   end
 
-  def numero_de_circulos() do
-    # A fazer
+  def numero_de_circulos(circulos) do
+    Enum.count(circulos)
   end
 
-  def ordena_raios() do
-    # A fazer
+  def ordena_raios(circulos) do
+    Enum.sort(circulos)
   end
 
-  def ordena_raios_descendente() do
-    # A fazer
+  def ordena_raios_descendente(circulos) do
+    Enum.sort(circulos, :desc)
   end
 
-  def variacao_raios() do
-    # A fazer
+  def variacao_raios(circulos) do
   end
 
-  def mediana_raios() do
-    # A fazer
+  def mediana_raios(circulos) when circulos |> Enum.count() |> Integer.is_even() do
+    media_raios(circulos)
+  end
+
+  def mediana_raios(circulos) when circulos |> Enum.count() |> Integer.is_odd() do
+    posicao_central = Enum.count(circulos) + 0.5 + 1
+
+    circulos
+    |> Enum.sort()
+    |> Enum.at(posicao_central)
   end
 end
 ```
